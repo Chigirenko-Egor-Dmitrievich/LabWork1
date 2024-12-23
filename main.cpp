@@ -3,86 +3,109 @@
     LabWork1
 */
 
+#include "debug_plugin.hpp"
+#include "rotate_image.hpp"
+#include "gaussian_filter.hpp"
+#include "show_options.hpp"
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "bmp_utils.hpp"
-#include "rotate_image.hpp"
-#include "gaussian_filter.hpp"
 
-void showMenu() {
-    std::cout << "Menu:\n";
-    std::cout << "1. Rotate 90 degrees clockwise\n";
-    std::cout << "2. Rotate 90 degrees counterclockwise\n";
-    std::cout << "3. Apply Gaussian filter\n";
-    std::cout << "4. Save image\n";
-    std::cout << "5. Exit\n";
-}
-
-int main() {
+int main()
+{
     BMPImage image;
 
     std::string filename;
     std::cout << "Enter the name of the input file: ";
     std::cin >> filename;
+    std::cout << std::endl;
 
-    if (!image.read(filename)) {
-        std::cerr << "Error reading BMP file!" << std::endl;
+    if (!image.read(filename))
+    {
+        std::cerr << "Error: BMP file reading failure!" << std::endl;
+        std::cerr << std::endl;
         return 1;
     }
 
-    bool running = true;
-    while (running) {
-        showMenu();
-        int choice;
-        std::cout << "Enter your choice: ";
-        std::cin >> choice;
+    bool ongoing = true;
+    while (ongoing)
+    {
+        showOptoins();
+        int command;
+        std::cout << "Enter command: ";
+        std::cin >> command;
+        std::cout << std::endl;
 
-        switch (choice) {
-            case 1: {
+        switch (command)
+        {
+            case 1:
+            {
                 rotateImage(image, RotationDirection::Clockwise);
-                std::cout << "Image rotated 90 degrees clockwise.\n";
+                std::cout << "An image was rotated clockwise by 90 degrees" << std::endl;
+                std::cout << std::endl;
                 break;
+
             }
-            case 2: {
+
+            case 2:
+            {
                 rotateImage(image, RotationDirection::CounterClockwise);
-                std::cout << "Image rotated 90 degrees counterclockwise.\n";
+                std::cout << "An image was rotated counterclockwise by 90 degrees" << std::endl;
+                std::cout << std::endl;
                 break;
             }
-            case 3: {
-                int kernelSize;
-                float sigma;
 
-                std::cout << "Enter kernel size (odd number): ";
-                std::cin >> kernelSize;
+            case 3:
+            {
+                int coreSize;
+                float σ;
 
-                if (kernelSize % 2 == 0) {
-                    std::cout << "Kernel size must be an odd number. Try again.\n";
+                std::cout << "Enter odd number - kernel size: ";
+                std::cin >> coreSize;
+                std::cout << std::endl;
+
+                if (coreSize % 2 == 0)
+                {
+                    std::cout << "Error: even number - kernel size - given" << std::endl;
+                    std::cout << std::endl;
                     break;
                 }
 
-                std::cout << "Enter sigma (standard deviation): ";
-                std::cin >> sigma;
+                std::cout << "Enter standard deviation - sigma (σ): ";
+                std::cin >> σ;
+                std::cout << std::endl;
 
-                applyGaussianFilter(image, kernelSize, sigma);
-                std::cout << "Gaussian filter applied.\n";
+                applyGaussianFilter(image, coreSize, σ);
+                std::cout << "Gaussian filter applied" << std::endl;
+                std::cout << std::endl;
                 break;
             }
-            case 4: {
+
+            case 4:
+            {
                 std::string outputFilename;
                 std::cout << "Enter the name of the output file: ";
                 std::cin >> outputFilename;
+                std::cout << std::endl;
 
                 image.save(outputFilename);
-                std::cout << "Image saved as " << outputFilename << ".\n";
+                std::cout << "Image saved as " << outputFilename << std::endl;
+                std::cout << std::endl;
                 break;
             }
-            case 5: {
-                running = false;
+
+            case 5:
+            {
+                std::cout << "Have a Nice Day! 🌺" << std::endl;
+                std::cout << std::endl;
+                ongoing = false;
                 break;
             }
-            default: {
-                std::cout << "Invalid choice. Please try again.\n";
+
+            default:
+            {
+                std::cout << "Error: invalid command" << std::endl;
+                std::cout << std::endl;
                 break;
             }
         }
@@ -90,4 +113,3 @@ int main() {
 
     return 0;
 }
-

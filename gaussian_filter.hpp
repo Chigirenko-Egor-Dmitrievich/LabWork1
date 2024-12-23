@@ -5,46 +5,56 @@
 
 #ifndef GAUSSIAN_FILTER_HPP
 #define GAUSSIAN_FILTER_HPP
-#include "bmp_utils.hpp"
+
+#include "debug_plugin.hpp"
 #include <cmath>
-#include <vector>
 #include <algorithm>
+#include <vector>
 
-void applyGaussianFilter(BMPImage& image, int kernelSize, float sigma) {
+void applyGaussianFilter(BMPImage& image, int coreSize, float σ)
+{
     int width = image.getWidth();
-    int height = image.getHeight();
+    int length = image.getLength();
 
-    std::vector<std::vector<float>> kernel(kernelSize, std::vector<float>(kernelSize));
-    int halfSize = kernelSize / 2;
+    std::vector<std::vector<float>> core(coreSize, std::vector<float>(coreSize));
+    int halfSize = coreSize / 2;
     float sum = 0.0;
 
-    for (int i = -halfSize; i <= halfSize; ++i) {
-        for (int j = -halfSize; j <= halfSize; ++j) {
-            kernel[i + halfSize][j + halfSize] = exp(-(i * i + j * j) / (2 * sigma * sigma));
-            sum += kernel[i + halfSize][j + halfSize];
+    for (int i = -halfSize; i <= halfSize; ++i)
+    {
+        for (int j = -halfSize; j <= halfSize; ++j)
+        {
+            core[i + halfSize][j + halfSize] = exp(-(i * i + j * j) / (2 * σ * σ));
+            sum += core[i + halfSize][j + halfSize];
         }
     }
 
-    for (int i = 0; i < kernelSize; ++i) {
-        for (int j = 0; j < kernelSize; ++j) {
-            kernel[i][j] /= sum;
+    for (int i = 0; i < coreSize; ++i)
+    {
+        for (int j = 0; j < coreSize; ++j)
+        {
+            core[i][j] /= sum;
         }
     }
 
-    std::vector<RGB> filteredPixels(width * height);
+    std::vector<RGB> filteredPixels(width * length);
 
-    for (int y = 0; y < height; ++y) {
-        for (int x = 0; x < width; ++x) {
+    for (int y = 0; y < length; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
             float red = 0.0f;
             float green = 0.0f;
             float blue = 0.0f;
 
-            for (int ky = -halfSize; ky <= halfSize; ++ky) {
-                for (int kx = -halfSize; kx <= halfSize; ++kx) {
+            for (int ky = -halfSize; ky <= halfSize; ++ky)
+            {
+                for (int kx = -halfSize; kx <= halfSize; ++kx)
+                {
                     int nx = std::clamp(x + kx, 0, width - 1);
-                    int ny = std::clamp(y + ky, 0, height - 1);
+                    int ny = std::clamp(y + ky, 0, length - 1);
 
-                    float weight = kernel[ky + halfSize][kx + halfSize];
+                    float weight = core[ky + halfSize][kx + halfSize];
                     const RGB& neighbor = image.getPixel(nx, ny);
 
                     red += neighbor.r * weight;
@@ -60,8 +70,10 @@ void applyGaussianFilter(BMPImage& image, int kernelSize, float sigma) {
         }
     }
 
-    for (int y = 0; y < height; ++y) {
-        for (int x = 0; x < width; ++x) {
+    for (int y = 0; y < length; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
             image.setPixel(x, y, filteredPixels[y * width + x]);
         }
     }
