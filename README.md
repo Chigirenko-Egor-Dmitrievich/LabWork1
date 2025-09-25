@@ -13,9 +13,9 @@ Labwork 1 - the programm for reading bmp file and manipulating it. There are 2 o
  3.Putting gaussan filter on image  
 ⠀  
 Addition 1: after starting the programm:  
- 1.write down the full name of the file  
- 2.use one of three options above  
- 3.save image  
+ 1.Write down the full name of the file  
+ 2.Use one of three options above  
+ 3.Save image  
 ⠀  
 Addition 2: you can repeat steps if you want
 ## Build
