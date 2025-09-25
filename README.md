@@ -19,10 +19,10 @@ Addition 1: after starting the programm:
 ⠀  
 Addition 2: you can repeat steps if you want
 ## Build
-make
+make  
 make redactor
 ## Run
-./test
+./test  
 ./start
 ## Clean
 make clean  
