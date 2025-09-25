@@ -3,7 +3,7 @@
     LabWork1
 */
 
-#include "debug_plugin.hpp"
+#include "plugins.hpp"
 #include <algorithm>
 #include <cmath>
 #include <fstream>
@@ -36,14 +36,15 @@ bool BMPImage::read(const std::string& filename)
     }
 
     file.read(reinterpret_cast<char*>(&infoHeader), sizeof(infoHeader));
+    
     width = infoHeader.biWidth;
     length = abs(infoHeader.biLength);
 
-    if (fileHeader.bfOffBits < sizeof(fileHeader) + infoHeader.biSize)
+    size_t extraSize = fileHeader.bfOffBits - (sizeof(fileHeader) + sizeof(infoHeader));
+    extraData.resize(extraSize);
+    if (extraSize > 0)
     {
-        std::cerr << "Error: invalid bfOffBits value" << std::endl;
-        std::cerr << std::endl;
-        return false;
+        file.read(reinterpret_cast<char*>(extraData.data()), extraSize);
     }
 
     file.seekg(fileHeader.bfOffBits, std::ios::beg);
@@ -71,10 +72,16 @@ void BMPImage::save(const std::string& filename)
 
     int rowPadding = (4 - (width * 3) % 4) % 4;
     infoHeader.biSizeImage = (width * 3 + rowPadding) * abs(length);
-    fileHeader.bfSize = sizeof(BMPFileHeader) + sizeof(BMPInfoHeader) + infoHeader.biSizeImage;
+    
+    fileHeader.bfSize = sizeof(BMPFileHeader) + sizeof(BMPInfoHeader) + extraData.size() + infoHeader.biSizeImage;
 
     outFile.write(reinterpret_cast<char*>(&fileHeader), sizeof(fileHeader));
     outFile.write(reinterpret_cast<char*>(&infoHeader), sizeof(infoHeader));
+    
+    if (!extraData.empty())
+    {
+        outFile.write(reinterpret_cast<const char*>(extraData.data()), extraData.size());
+    }
 
     for (int y = 0; y < abs(length); ++y)
     {

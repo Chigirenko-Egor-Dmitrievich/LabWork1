@@ -6,7 +6,7 @@
 #ifndef GAUSSIAN_FILTER_HPP
 #define GAUSSIAN_FILTER_HPP
 
-#include "debug_plugin.hpp"
+#include "plugins.hpp"
 #include <cmath>
 #include <algorithm>
 #include <vector>

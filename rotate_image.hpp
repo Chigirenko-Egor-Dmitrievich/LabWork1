@@ -6,7 +6,7 @@
 #ifndef ROTATE_IMAGE_HPP
 #define ROTATE_IMAGE_HPP
 
-#include "debug_plugin.hpp"
+#include "plugins.hpp"
 
 enum class RotationDirection
 {

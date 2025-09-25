@@ -3,8 +3,8 @@
     LabWork1
 */
 
-#ifndef DEBUG_PLUGIN_HPP
-#define DEBUG_PLUGIN_HPP
+#ifndef PLUGINS
+#define PLUGINS
 
 #include <vector>
 #include <string>
@@ -51,6 +51,7 @@ class BMPImage
         BMPFileHeader fileHeader;
         BMPInfoHeader infoHeader;
         std::vector<RGB> pixels;
+        std::vector<uint8_t> extraData;
         int width;
         int length;
 
@@ -63,12 +64,12 @@ class BMPImage
 
         int getWidth() const
         {
-        return width;
+            return width;
         }
         
         int getLength() const
         {
-        return length;
+            return length;
         }
 
         RGB getPixel(int x, int y) const;
@@ -78,12 +79,12 @@ class BMPImage
 
         const BMPInfoHeader& getInfoHeader() const
         {
-        return infoHeader;
+            return infoHeader;
         }
 
         const BMPFileHeader& getFileHeader() const
         {
-        return fileHeader;
+            return fileHeader;
         }
 };
 
