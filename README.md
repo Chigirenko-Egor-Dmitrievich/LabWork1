@@ -14,9 +14,9 @@ Labwork 1 - the BMP image processing tool with multi-threaded operations. There 
  3. Putting gaussan filter on image  
 ⠀  
 Addition 1: after starting the programm:  
- 1. Write down the full name of the file  
- 2. Use one of three options above  
- 3. Save image  
+ 1.Write down the full name of the file  
+ 2.Use one of three options above  
+ 3.Save image  
 ⠀  
 Addition 2: you can repeat steps if you want
 ## Build
